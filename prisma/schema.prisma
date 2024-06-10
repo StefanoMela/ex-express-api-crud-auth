@@ -23,10 +23,12 @@ model Post {
   content    String
   published  Boolean
   categoryId Int
+  userId Int
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   category   Category @relation(fields: [categoryId], references: [id])
   tags       Tag[]    @relation("PostToTag")
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Tag {
@@ -35,4 +37,15 @@ model Tag {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   posts     Post[]   @relation("PostToTag")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  lastName  String?
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts Post[]
 }
