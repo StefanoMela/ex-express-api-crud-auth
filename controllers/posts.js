@@ -45,7 +45,12 @@ const index = async (req, res) => {
                     select: {
                         name: true
                     },
-                }
+                },
+                user: {
+                    select: {
+                        name: true
+                    },
+                },
             }
         });
 
@@ -77,7 +82,7 @@ const show = async (req, res) => {
 
 }
 const create = async (req, res) => {
-    const { title, image, content, categoryId, tags } = req.body;
+    const { title, image, content, categoryId, tags, userId } = req.body;
 
     const data = {
         title,
@@ -85,15 +90,11 @@ const create = async (req, res) => {
         image,
         content,
         published: req.body.published ? true : false,
-        tags: {
-            connect:
-                tags ? tags.map(id => ({ id })) : []
-        }
+        category: { connect: { id: parseInt(categoryId) } },
+        tags: { connect: tags.map((id) => ({ id: parseInt(id) })) },
+        user: { connect: { id: parseInt(userId) } },
     };
-
-    if (categoryId) {
-        data.categoryId = categoryId;
-    }
+    console.log(data);
 
     try {
         const post = await prisma.post.create({ data });

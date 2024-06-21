@@ -8,9 +8,13 @@ const validator = require('../middlewares/validator');
 const { bodyData } = require('../validations/posts')
 const { slugCheck } = require('../validations/generic')
 
+
+const multer = require('multer');
+const uploader = multer({dest: "./public/imgs"});
+
 router.get('/', postController.index);
 
-router.post('/', authMdw.authProcedure, validator(bodyData), postController.create);
+router.post('/', uploader.single("image"), validator(bodyData), postController.create);
 
 router.get('/:slug', validator(slugCheck), postController.show);
 

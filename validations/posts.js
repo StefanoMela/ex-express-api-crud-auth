@@ -49,6 +49,7 @@ const bodyData = {
             errorMessage: "L'id della categoria deve essere un intero",
             bail: true,
         },
+        toInt: true,
         custom: {
             options: async (value) => {
                 const categoryId = parseInt(value);
@@ -72,6 +73,7 @@ const bodyData = {
             errorMessage: "Tags deve essere un array",
             bail: true
         },
+        toInt: true,
         custom: {
             options: async (ids) => {
                 if (ids.length === 0) {
@@ -88,6 +90,26 @@ const bodyData = {
                     throw new Error(`Uno o più tags specificati non esistono.`);
                 }
                 return true;
+            }
+        },
+        userId: {
+            in: ['body'],
+            isInt: {
+                errorMessage: "L'id dell'utente deve essere un intero",
+                bail: true,
+            },
+            toInt: true,
+            custom: {
+                options: async (value) => {
+                    const userId = parseInt(value);
+                    const user = await prisma.user.findUnique({
+                        where: { id: userId }
+                    });
+                    if (!user) {
+                        throw new Error(`Non esiste un utente con id ${userId}`)
+                    }
+                    return true;
+                }
             }
         }
     }
