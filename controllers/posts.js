@@ -138,11 +138,11 @@ const update = async (req, res) => {
 }
 
 const destroy = async (req, res) => {
-    const { slug } = req.params;
+    const { id } = req.params;
     await prisma.post.delete({
-        where: { slug: slug }
+        where: { id: parseInt(id) }
     });
-    res.json('Post con slug' + slug + 'eliminato con successo');
+    res.json('Post con id' + id + 'eliminato con successo');
 }
 
 module.exports = {

@@ -4,6 +4,14 @@ const prisma = new PrismaClient();
 // validazione campi del body ricevuto dal client
 
 const bodyData = {
+    id: {
+        in: ['params'],
+        isInt: {
+            options: { min: 1 },
+            bail: true
+        },
+        toInt: true
+    },
     // per ogni campo specifico dove si trova il valore e assegno i controlli da eseguire 
     title: {
         in: ['body'],
@@ -91,25 +99,25 @@ const bodyData = {
                 }
                 return true;
             }
+        }
+    },
+    userId: {
+        in: ['body'],
+        isInt: {
+            errorMessage: "L'id dell'utente deve essere un intero",
+            bail: true,
         },
-        userId: {
-            in: ['body'],
-            isInt: {
-                errorMessage: "L'id dell'utente deve essere un intero",
-                bail: true,
-            },
-            toInt: true,
-            custom: {
-                options: async (value) => {
-                    const userId = parseInt(value);
-                    const user = await prisma.user.findUnique({
-                        where: { id: userId }
-                    });
-                    if (!user) {
-                        throw new Error(`Non esiste un utente con id ${userId}`)
-                    }
-                    return true;
+        toInt: true,
+        custom: {
+            options: async (value) => {
+                const userId = parseInt(value);
+                const user = await prisma.user.findUnique({
+                    where: { id: userId }
+                });
+                if (!user) {
+                    throw new Error(`Non esiste un utente con id ${userId}`)
                 }
+                return true;
             }
         }
     }

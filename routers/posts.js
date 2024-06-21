@@ -20,7 +20,7 @@ router.get('/:slug', validator(slugCheck), postController.show);
 
 router.put('/:slug', authMdw.authProcedure, authMdw.isUserPost, validator(bodyData), postController.update);
 
-router.delete('/:slug', authMdw.authProcedure, authMdw.isUserPost, postController.destroy);
+router.delete('/:id', postController.destroy);
 
 
 module.exports = router;
